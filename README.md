@@ -128,7 +128,7 @@ $$P_j = \frac{w_j}{\sum_k w_k}$$
 
 The weights may be updated depending on three situations that can occur:
 - improvement with respect to the best objective function value found so far (global improvement)
-- local improvement but not global.
+- local but not global improvement.
 - worsening, but accepted due to the simulated annealing mechanism.
 
 Two vector are defined:
