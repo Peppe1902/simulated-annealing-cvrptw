@@ -93,7 +93,7 @@ $i+1$. The two arcs are chosen randomly in this move implementation.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/fd9ab489-323f-41b2-988a-4dde6c898818" />
 
-## Testing with Adaptive Probabilites:
+## Testing with Adaptive Probabilites
  
 **Instance R208 (100 customers):**
 - Final objective function value: $f = 776.60$
