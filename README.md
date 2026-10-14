@@ -95,3 +95,13 @@ $i+1$. The two arcs are chosen randomly in this move implementation.
 
 ## Testing
 
+Adaptive probabilites:
+
+
+Instance R208 (100 customers)
+- Final objective function value: $f = 776.60$
+- Simulated annealing duration: $t = 27.2881$ s (with $\alpha = 0.98$)
+- Initial weights: $w_0 = [0.3, 0.4, 0.3]$ (initial probabilities = [30%, 40%, 30%])
+
+<img width="1592" height="843" alt="image" src="https://github.com/user-attachments/assets/16fddcd6-6a46-4a95-a6bb-b58fa670c30e" />
+
