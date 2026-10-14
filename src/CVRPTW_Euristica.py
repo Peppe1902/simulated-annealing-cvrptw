@@ -353,8 +353,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
     a_base = a.copy()
     rotte_new = [r[:] for r in rotte]
 
-    #--------------rotta di partenza controllo che il cliente possa essere spostato-------------------
-    r1 = random.randint(0,num_rotte-1) #scelta randomica rotta sorgente
+    r1 = random.randint(0,num_rotte-1) 
     r2 = random.choice([i for i in range(len(rotte_new)) if i!=r1])
 
 
@@ -366,38 +365,37 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
         k = random.randint(1,len(rotte_new[r1])-2)
 
     new_client = rotte_new[r1][k]
-    rotte_new[r1].remove(new_client) #rimuovo il cliente id new_cliente dalla prima rotta
+    rotte_new[r1].remove(new_client) #remove the client with ID "new_client" from the first route
 
-    #dopo la rimozione controllo la fattibilita temporale
+    # after the client removal, check the time constraints
     a_base,fattibile = check_finestre_temporali(clienti,rotte_new,r1,k,a_base,D)
 
     if fattibile == False :
         return rotte,a,False
     
-    #-------------rotta di destinazione----------------
-    f_best = objective_function(rotte,D) #valore della funzione obiettivo calcolata sulle rotte prima della mossa
+    #-------------destination route----------------
+    f_best = objective_function(rotte,D) #objective function value computed before move execution
     pos_best = -1 
-    a_best = a_base.copy() #vettore dei tempi di arrivo ai della soluzione migliori
-    rotte_best = [r[:] for r in rotte_new] #rotte migliori in base alla miglior posizione di inserimento
+    a_best = a_base.copy() # arrival times vector of the best solution
+    rotte_best = [r[:] for r in rotte_new] # best route depending on the best insertion position
 
-    #provo le possibili posizioni di inserimento e cerco la migliore in termini di minimizzazione dell'obiettivo
+    # all the possible insertion positions are tested and the one with the best objective function value is selected
     for curr_pos in range(1,len(rotte_new[r2])) :
 
-        #uso queste strutture dati di appoggio in modo da fare l'inserimento
-        #non definitivamente e testare la fattibilita
+        # a temporary structure  (rotte_tmp) is used to test the move feasibiliy
         a1 = a_base.copy()
         rotte_tmp = [r[:] for r in rotte_new]
         
-        #inserisco nella posizione curr_pos di rotte_tmp
+        # insertion at position curr_pos in route_tmp
         rotte_tmp[r2].insert(curr_pos,new_client) 
         
-        #verifico validita vincoli temporali
+        # check time constraints 
         a1,fattibile = check_finestre_temporali(clienti,rotte_tmp,r2,curr_pos,a1,D)
 
         if fattibile == False :
             continue
 
-        #verifico validitia vincoli di capienza dei veicoli
+        # check vehicle capacity
         demand = sum(clienti[rotte_tmp[r2][i]]['demand'] for i in range(len(rotte_tmp[r2])))
 
         if demand > capacita :
@@ -405,18 +403,18 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
 
         f_tmp = objective_function(rotte_tmp,D)
 
-        #tengo traccia della posizione di inserimento piu efficiente
+        # track the position with the best value of F
         if f_tmp < f_best :
             pos_best = curr_pos
             f_best = f_tmp
             a_best = a1.copy()
-            rotte_best = [r[:] for r in rotte_tmp] #aggiorno le rotte
+            rotte_best = [r[:] for r in rotte_tmp] #routes updated
 
     if pos_best == -1 :
             return rotte,a,False
     
-    if len(rotte_best[r1]) == 2 : #avendo rimosso l'unico cliente nella rotta r1
-        del rotte_best[r1] #la rotta r1 puo essere chiusa
+    if len(rotte_best[r1]) == 2 : 
+        del rotte_best[r1] # route r1 is closed (if it contains only one client)
     
     return rotte_best,a_best,True
 
@@ -503,17 +501,17 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
     a_best = a.copy()
     T = T0
 
-    num_moves = 3  # Assegna un indice a ogni mossa: 0=INSERTION, 1=2-OPT, 2=CROSS_EXCHANGE
-    weights = w0  # Pesi iniziali
+    num_moves = 3  # an index is assigned to every move: 0=INSERTION, 1=2-OPT, 2=CROSS_EXCHANGE
+    weights = w0  # initial weigths
     K_interval = 10
     scores = np.zeros(num_moves) 
-    usage = np.zeros(num_moves)  # Contatore di utilizzo nell'intervallo K
-    gamma = 0.1 # Fattore di reazione (gamma): quanto rapidamente i pesi si adattano (0.1 è tipico)
+    usage = np.zeros(num_moves)  # usage counter
+    gamma = 0.1 # reaction factor (gamma): how fast the weights adapt (typically 0.1)
 
-    # Calcola le PROBABILITA iniziali (semplice normalizzazione)
+    # Computation of initial probabilites (normalization)
     Probs = weights / np.sum(weights)
 
-    temp_cycle = 0 # Contatore del ciclo di temperatura
+    temp_cycle = 0 # counter of temperature cycle
     
     #print('T,BestInsertionP,Randomized2optP,CrossExchangeP,f_best')
     
@@ -525,17 +523,17 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
             
             a1 = a.copy()
             
-            # random.choice seleziona l'indice in base alle probabilità P
+            # random.choice select move index depeding on probabilities P
             move= np.random.choice(num_moves, p=Probs) 
             usage[move] += 1 # Conto l'utilizzo
 
             fattibile = False
             
-            if move == 0: # INSERTION (Mossa 0)
+            if move == 0: # INSERTION (Move 0)
                 X1, a1, fattibile = best_insertion_move(clienti, X, D, a1, capacita)
-            elif move == 1 : # 2-OPT (Mossa 1)
+            elif move == 1 : # 2-OPT (Move 1)
                 X1, a1, fattibile = randomized_move_2_opt(clienti, X, D, a1)
-            else : # CROSS_EXCHANGE (Mossa 2)
+            else : # CROSS_EXCHANGE (Move 2)
                 X1, a1, fattibile = cross_exchange_move(clienti, X, D, a1, capacita)
             
             if fattibile == False :
@@ -547,14 +545,14 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
             
             reward = 0
 
-            # 1. Mossa di successo: Migliora la soluzione corrente
+             # 1. Successful move : improve the current solution 
             if delta_f < 0 :
                 X = [r[:] for r in X1]
                 a = a1.copy()
-                reward = 50  # Punteggio S2 (Successo locale)
+                reward = 50  # S2 score (local success)
 
                 
-            # 2. Mossa di accettazione: Peggiora ma viene accettata da SA (esplorazione)
+           # 2. Acceptance move: the solution gets worse but is accepted by SA (exploration)
             else  :
                 r = random.random()
                 if r < np.exp(-(delta_f) / T) :
@@ -563,13 +561,13 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
                     if delta_f > 0:
                         reward = 5
 
-            # 3. Aggiornamento globale: Aggiorna il best globale
+            # 3. Global update: update the global best
             if f_X1 < f_best:
                 #print(f"T={T:.2f} | **NUOVO BEST**:  {f_X1:.4f}")
                 X_best = [r[:] for r in X1]
                 f_best = f_X1
                 a_best = a.copy()
-                reward = 100 # Punteggio S1 (Massimo successo)
+                reward = 100 # S1 score (maximum success)
 
             if reward > 0 :
                 scores[move] += reward 
@@ -580,19 +578,17 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
 
                 if usage[i] > 0:
                 
-                    # Calcolo del "successo medio" in questo intervallo: Punti / Utilizzo
+                    # average success rate" computation ( score / usage)
                     success_rate = scores[i] / usage[i]
         
-                    # Aggiornamento dei pesi (Media mobile smorzata)
+                    # weights update (exponential moving average)
                     weights[i] = weights[i] * (1-gamma) + (gamma) * success_rate
 
-            # Normalizzazione per ottenere le nuove probabilità
+            # Normalization to get the new probabilites 
             Probs = weights / np.sum(weights)
-
 
             print(f"T={T:.2f} | Nuove Probabilità: {Probs} | f_best : {f_best}")
             #print(f"{T:.2f},{Probs[0]},{Probs[1]},{Probs[2]},{f_best}")
-
 
             scores.fill(0) 
             usage.fill(0)
@@ -610,11 +606,11 @@ def SimulatedAnnealingFixed(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0) 
     a_best = a.copy()
     T = T0
 
-    num_moves = 3  # Assegna un indice a ogni mossa: 0=INSERTION, 1=2-OPT, 2=CROSS_EXCHANGE
-    weights = w0  # Pesi iniziali
+    num_moves = 3  # an index is assigned to every move: 0=INSERTION, 1=2-OPT, 2=CROSS_EXCHANGE
+    weights = w0  # initial weigth
     scores = np.zeros(num_moves) 
-    usage = np.zeros(num_moves)  # Contatore di utilizzo nell'intervallo K
-    # Calcola le PROBABILITA iniziali (semplice normalizzazione)
+    usage = np.zeros(num_moves) 
+    # computation of initial probabilities  PROBABILITA iniziali (normalization)
     Probs = weights / np.sum(weights)
     
     print(Probs)
@@ -626,16 +622,16 @@ def SimulatedAnnealingFixed(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0) 
             
             a1 = a.copy()
             
-            # random.choice seleziona l'indice in base alle probabilità P
+            # random.choice select move index depending on probabilites P
             move= np.random.choice(num_moves, p=Probs) 
 
             fattibile = False
             
-            if move == 0: # INSERTION (Mossa 0)
+            if move == 0: # INSERTION (Move 0)
                 X1, a1, fattibile = best_insertion_move(clienti, X, D, a1, capacita)
-            elif move == 1 : # 2-OPT (Mossa 1)
+            elif move == 1 : # 2-OPT (Move 1)
                 X1, a1, fattibile = randomized_move_2_opt(clienti, X, D, a1)
-            else : # CROSS_EXCHANGE (Mossa 2)
+            else : # CROSS_EXCHANGE (Move 2)
                 X1, a1, fattibile = cross_exchange_move(clienti, X, D, a1, capacita)
             
             if fattibile == False :
@@ -647,19 +643,19 @@ def SimulatedAnnealingFixed(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0) 
             
             reward = 0
 
-            # 1. Mossa di successo: Migliora la soluzione corrente
+            # 1. successful move : improve the current solution 
             if delta_f < 0 :
                 X = [r[:] for r in X1]
                 a = a1.copy()
                 
-            # 2. Mossa di accettazione: Peggiora ma viene accettata da SA (esplorazione)
+            # 2. acceptance move: the solution gets worse but is accepted by SA (exploration)
             else  :
                 r = random.random()
                 if r < np.exp(-(delta_f) / T) :
                     X = [r[:] for r in X1]
                     a = a1.copy()
 
-            # 3. Aggiornamento globale: Aggiorna il best globale
+            # 3. global update: update the global best
             if f_X1 < f_best:
                 #print(f"T={T:.2f} | **NUOVO BEST**:  {f_X1:.4f}")
                 X_best = [r[:] for r in X1]
