@@ -8,10 +8,11 @@ import time
 import itertools
 
 
-"""Funzione che esegue una lettura semplice file istanza Solomon"""
+'''
+Function that performs a simple read of a Solomon instance file
+'''
 def leggi_file_solomon(filename):
-    """Legge il file Solomon e estrae i dati"""
-    
+
     with open(filename, 'r') as f:
         lines = f.readlines()
     
@@ -20,7 +21,7 @@ def leggi_file_solomon(filename):
     deposito = None
     clienti = []
     
-    # Cerca la sezione VEHICLE
+    # search VEHICLE section
     for i, line in enumerate(lines):
         if 'VEHICLE' in line:
             vehicle_line = lines[i+2].strip().split()
@@ -28,7 +29,7 @@ def leggi_file_solomon(filename):
             capacita = int(vehicle_line[1])
             break
     
-    # Cerca la sezione CUSTOMER
+    #search CUSTOMER section
     inizio_clienti = False
     for line in lines:
         if 'CUST NO.' in line:
@@ -56,20 +57,22 @@ def leggi_file_solomon(filename):
     return num_veicoli, capacita, deposito, clienti
 
 
-'''Funzione che calcola la matrice delle distanze tra tutte le coppie (i,j)'''
+'''
+Function that computes the distance matrix between all the couples (i, j)
+'''
 def distances_matrix(deposito,clienti) :
 
-    #clienti.insert(0, deposito)  # 0 è l'indice è il deposito
+    #clienti.insert(0, deposito)  # 0 is the depot index
     n = len(clienti)
     print(n)
 
     D = np.zeros((n,n))
 
-    #distanza tra un nodo e se stesso
+    #distance between the node and itself
     for i in range(0,n) :
         D[i][i] = 0
 
-    #distanza tra deposito tutti i nodi
+   # distance between the depot and all the nodes
     for i in range(0,n) :
         D[0][i] = np.sqrt((deposito['x']-clienti[i]['x'])**2 + (deposito['y']-clienti[i]['y'])**2)
         D[i][0] = D[0][i]
@@ -83,33 +86,35 @@ def distances_matrix(deposito,clienti) :
     return D
 
 
-'''#Funzione che stampa le rotte a schermo'''
+'''
+Function that shows the routes on the display
+'''
 def plot_rotte(rotte, clienti, deposito=0):
 
     
     plt.rcParams.update({       
-    'font.family': 'serif',         # Font più leggibile e "accademico"
-    'font.size': 10,                # Grandezza testo coerente
-    'savefig.dpi': 300,             # Alta risoluzione per stampa/pubblicazione
-    'lines.linewidth': 2,         # Linee abbastanza visibili ma non troppo spesse
+    'font.family': 'serif',         
+    'font.size': 10,                
+    'savefig.dpi': 300,            
+    'lines.linewidth': 2,         
     })
     
 
     plt.figure(figsize=(8, 6))
     
-    # Disegno il deposito
+    #Draw deposit
     depot_x = clienti[deposito]['x']
     depot_y = clienti[deposito]['y']
-    plt.scatter(depot_x, depot_y, c='red', s=150, marker='s', label='Deposito') #s=quadrato
+    plt.scatter(depot_x, depot_y, c='red', s=150, marker='s', label='Deposito') 
 
-    # Disegno i clienti
+    #Draw client
     for i, c in enumerate(clienti):
         if i != deposito:
             plt.scatter(c['x'], c['y'], c='black', s=40)
-            plt.text(c['x'] + 0.8, c['y'] + 0.8, str(i), fontsize=8) #0.8 sposta leggermenmete a destra 
-            #str(i) converte l’indice del cliente (che è un numero) in stringa, perché text richiede stringa
+            plt.text(c['x'] + 0.8, c['y'] + 0.8, str(i), fontsize=8)
+         
     
-    # Disegno le rotte
+    #Draw routes
     for k, route in enumerate(rotte):
         color = (random.random(), random.random(), random.random())
         x = [clienti[i]['x'] for i in route]
@@ -126,24 +131,25 @@ def plot_rotte(rotte, clienti, deposito=0):
     return
 
 
-'''Funzione per determinare la soluzione iniziale mediante TimeOrientedNeirestNeighbor Approach
+'''
+Function that compute the initial solution by adopting TimeOrientedNeirestNeighbor Approach
 '''
 def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0.3) :
 
     N = len(clienti)
     deposito = 0
 
-    demands = [0] #la domanda della prima rotta è 0
-    rotte = [[deposito]] #l'insieme delle rotte inizialmente ha il solo deposito
-    a = np.zeros(N) #ai = tempo di inizio servizio nodo i
-    s = [clienti[i]['service_time'] for i in range(N)] #service times dei vari clienti
-
-    a[0] = clienti[deposito]['ready_time'] #caso base
+    demands = [0] #the demand of the first route is 0 
+    rotte = [[deposito]] # the route initially contains only the depot
+    a = np.zeros(N) #a_i = initial service temp of node i
+    s = [clienti[i]['service_time'] for i in range(N)] #service times of the clients
+    
+    a[0] = clienti[deposito]['ready_time'] #base case
     k = 0
 
     nodo_curr = None
     nodo_prec = deposito
-    U = clienti[1:N] #vettore dei clienti unroutes (inizialmente tutti eccetto il primo (che è il deposito))
+    U = clienti[1:N] # unrouted clients vector (initially it contains all the clients except the depot)
 
     while True :
 
@@ -152,7 +158,7 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
         start_service_time = None
 
         for client in U :
-            j = client['id'] #id cliente corrente
+            j = client['id'] #current client ID
 
             a_j = max(clienti[j]['ready_time'],a[nodo_prec]+s[nodo_prec]+D[nodo_prec][j])
             T_ij = a_j  - (a[nodo_prec] + s[nodo_prec])
@@ -167,13 +173,13 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
                     nodo_curr = j
  
         if nodo_curr == None :
-            rotte[k].append(deposito) #chiudo rotta corrente
+            rotte[k].append(deposito) # close the current route 
             k = k + 1
 
             if k < num_veicoli and len(U) > 0 :
-                rotte.append([deposito])  #apro una nuova rotta
+                rotte.append([deposito])  # open a new route
                 demands.append(0)
-                nodo_prec = deposito #riparto dal deposito
+                nodo_prec = deposito # starting again from the depot
             else :
                 break
         else :
@@ -183,18 +189,19 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
             demands[k] = demands[k] + clienti[nodo_curr]['demand']
             nodo_prec = nodo_curr
 
-            U = [c for c in U if c['id'] != nodo_curr] #rimuovo nodo_curr dai clienti unrouted
+            U = [c for c in U if c['id'] != nodo_curr] #remove nodo_curr from unrouted clients
             
     
-    ultima_rotta = rotte[-1] #-1 indica l'ultimo elemento del vettore
-    if len(rotte) > 0 and ultima_rotta[-1] != deposito : #se l'ultima rotta (se esiste) non è stata chiusa
-        #cioè l'ultimo elemento non è il deposito la chiudiamo
+    ultima_rotta = rotte[-1] #-1 represents the last element of the vector
+    if len(rotte) > 0 and ultima_rotta[-1] != deposito : #if the last route has not been closed (the last element is not the depot) 
+        
         rotte[-1].append(deposito)
 
     return rotte,U,a
 
 
-'''Funzione che calcola la funzione obiettivo come distanza totale percorsa
+'''
+Function that computes the objective function F(X) (total distance travelled)
 '''
 def objective_function(rotte,D) :
     f = 0
@@ -243,7 +250,8 @@ def get_best_params(clienti, D, capacita, num_veicoli, passo=0.1):
     return migliori_parametri, miglior_punteggio
 
 
-'''Mossa di Cross Exchange
+'''
+Cross Exchange move
 '''
 def cross_exchange_move(clienti,rotte,D,a,capacita) :
 
@@ -412,7 +420,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
 
 
 '''
-Mossa 2 opt intra-rotta. Tenta di invertire un segmento (i+1, j) in una rotta scelta casualmente (o specificata).
+Randomized 2opt move. Tenta di invertire un segmento (i+1, j) in una rotta scelta casualmente (o specificata).
 '''
 def randomized_move_2_opt(clienti, rotte, D, a):
     
