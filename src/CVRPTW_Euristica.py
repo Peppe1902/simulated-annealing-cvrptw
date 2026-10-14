@@ -139,12 +139,12 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
     N = len(clienti)
     deposito = 0
 
-    demands = [0] #the demand of the first route is 0 
+    demands = [0] # the demand of the first route is 0 
     rotte = [[deposito]] # the route initially contains only the depot
-    a = np.zeros(N) #a_i = initial service temp of node i
-    s = [clienti[i]['service_time'] for i in range(N)] #service times of the clients
+    a = np.zeros(N) # a_i = service start time of node i
+    s = [clienti[i]['service_time'] for i in range(N)] # service times of the clients
     
-    a[0] = clienti[deposito]['ready_time'] #base case
+    a[0] = clienti[deposito]['ready_time'] # base case
     k = 0
 
     nodo_curr = None
@@ -211,7 +211,8 @@ def objective_function(rotte,D) :
     return f
 
 
-'''Funzione di calibrazione che ricava migliori parametri per TimeOrientedNN
+'''
+Function that computes the best parameter values for the TimeOrientedNN
 '''
 def get_best_params(clienti, D, capacita, num_veicoli, passo=0.1):
 
@@ -321,8 +322,9 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
 
 
 
-'''Funzione che verifica in una rotta route_idx, partendo da una posizione pos in poi che tutti rispettino
-i vincoli temporali sulle finestre '''
+'''
+Function that checks in a route route_idx, starting from a position pos, if all time-window constraints are met
+'''
 def check_finestre_temporali(clienti,rotte,route_idx,pos,a,D) :
 
     a_new = a.copy()
@@ -420,7 +422,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
 
 
 '''
-Randomized 2opt move. Tenta di invertire un segmento (i+1, j) in una rotta scelta casualmente (o specificata).
+Randomized 2-opt move: tries to reverse the segment (i+1, j) in a randomly selected route
 '''
 def randomized_move_2_opt(clienti, rotte, D, a):
     
@@ -489,7 +491,7 @@ def randomized_move_2_opt(clienti, rotte, D, a):
 
 
 
-'''Funzione chiave : SimulatedAnnealing'''
+'''SimulatedAnnealing Algorithm'''
 # Supponiamo che le funzioni 'objective_function', 'best_insertion_move', 
 # 'randomized_move_2_opt', 'cross_exchange_move' e le variabili 'clienti', 
 # 'D', 'capacita' siano definite altrove.
@@ -747,13 +749,12 @@ if __name__ == '__main__' :
 
     X,f,a_best = SimulatedAnnealingFixed(T0,Tf,alfa,Lk,rotte,a,clienti,D,capacita,w0)
 
-    # --- Fine misurazione SA ---
     end_time_sa = time.time()
     
-    # Calcola la durata
+    #execution time required
     duration_sa = end_time_sa - start_time_sa
 
-    # Stampa i risultati e il tempo
+    #show duration and final objective function value
     print(f"\nFunzione obiettivo finale (f): {f}")
     print(f"Durata Simulated Annealing: {duration_sa:.4f} secondi")
 
