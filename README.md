@@ -87,13 +87,13 @@ $c_{ij}$ is a linear combination of three parameters:
 
 $$c_{ij} = \delta_1 d_{ij} + \delta_2 T_{ij} + \delta_3 v_{ij}$$
 
-- 𝑫_𝒊𝒋 : represents the physical distance between the two nodes
-- $T_{ij}$ — represents the temporal distance, expressed as the difference between
+- $D_{ij}$  : represents the physical distance between the two nodes
+- $T_{ij}$ : represents the temporal distance, expressed as the difference between
   the service start time of node $j$ and the service end time of node $i$:
 
 $$T_{ij} = a_j - (a_i + s_i)$$
 
-- $v_{ij}$ — represents the remaining time within which the service of client $j$ can start without violating the time window:
+- $v_{ij}$ : represents the remaining time within which the service of client $j$ can start without violating the time window:
 
 $$v_{ij} = L_j - (a_i + s_i + t_{ij})$$
 
