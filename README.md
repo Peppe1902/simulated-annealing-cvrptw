@@ -104,15 +104,19 @@ Adaptive probabilites:
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/16fddcd6-6a46-4a95-a6bb-b58fa670c30e" />
 
-<img width="1597" height="872" alt="image" src="https://github.com/user-attachments/assets/9f7971c0-1a2a-4e48-870e-f30c228fd8bc" />
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/9f7971c0-1a2a-4e48-870e-f30c228fd8bc" />
 
-<img width="1615" height="876" alt="image" src="https://github.com/user-attachments/assets/ef223a47-8fe6-46d5-805c-077449ec1817" />
-
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/ef223a47-8fe6-46d5-805c-077449ec1817" />
 
 **Instance R2_2_3 (200 customers):**
 - Final objective function value 𝑓 = 2865.8053590536174
 - Simulated annealing duration: t = 77.2340 s (𝛼=0.99)
 - Initial weights 𝑤0 = [3.0,4.0,3.0] (initial probabilites = [30%,40%,30%])
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/98f01032-723a-4cc6-9703-42badabad4f6" />
+<img width="800" src="https://github.com/user-attachments/assets/98f01032-723a-4cc6-9703-42badabad4f6" />
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/3babf063-ddbd-4c32-830e-9332abc2dfa1" />
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/e6e668ca-47c0-4ac6-b6f1-5a0add801ba8" />
+
 
