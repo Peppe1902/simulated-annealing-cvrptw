@@ -142,7 +142,7 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
     demands = [0] # the demand of the first route is 0 
     rotte = [[deposito]] # the route initially contains only the depot
     a = np.zeros(N) # a_i = service start time of node i
-    s = [clienti[i]['service_time'] for i in range(N)] # service times of the clients
+    s = [clienti[i]['service_time'] for i in range(N)] # service time of the clients
     
     a[0] = clienti[deposito]['ready_time'] # base case
     k = 0
