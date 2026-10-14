@@ -340,7 +340,8 @@ def check_finestre_temporali(clienti,rotte,route_idx,pos,a,D) :
     return a_new,True
     
 
-'''Mossa di best insertion di un cliente da una rotta in un altra entrambe scelte casualmente
+'''
+Best insertion move
 '''
 def best_insertion_move(clienti, rotte, D, a, capacita):
 
