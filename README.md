@@ -2,8 +2,8 @@
 Simulated annealing applied to the Capacitated Vehicle Routing Problem with Time Windows
 
 It is one of the most used metaheuristics to solve combinatorial optimization problems. It belongs to the family of algorithms that simulate natural phenomena.
-The phenomena is annealing process of a solid:
-- physical process where the solid starts at an initial high temperature (close tothe melting point) and the molecules within the solid follow a random distribution
+The phenomena is **annealing process of a solid**:
+- Physical process where the solid starts at an initial high temperature (close tothe melting point) and the molecules within the solid follow a random distribution
 - Reducing the temperature slowly, the particles will try to position themselves in an equilibrium state
 - If the cooling process were too fast, the particles would not have time to position themselves and this would cause the loss of the initial structure
 - The **Metropolis algorithm** allows the simulation of this process and is shown in the pseudocode reported below.
