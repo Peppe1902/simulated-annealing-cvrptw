@@ -221,20 +221,20 @@ def get_best_params(clienti, D, capacita, num_veicoli, passo=0.1):
     
     print(f"Inizio calibrazione parametri con passo={passo}...")
 
-    # Itera su delta1 da 0 a 1
+    # Iterate on delta1 from 0 to 1
     for d1 in np.arange(0, 1.01, passo):
-        # Itera su delta2 da 0 fino a quel che resta per arrivare a 1
+      # iterate on delta2 from 0 to the remaining amount up to 1
         for d2 in np.arange(0, 1.01 - d1, passo):
 
             d3 = abs(1.0 - d1 - d2)
             
-            # Arrotondiamo per evitare imprecisioni del floating point
+            # round to avoid floating point inaccuracies
             params = (round(d1, 2), round(d2, 2), round(d3, 2))
             
-            # Esegui l'euristica con i parametri correnti
+            # execute the heuristic with the current parameter values
             rotte, clienti_non_serviti, a = TimeOrientedNN(clienti, D, capacita, num_veicoli, params[0], params[1], params[2])
             
-            # Consideriamo la soluzione valida SOLO se tutti i clienti sono stati serviti
+            # the solution is considered valid only if all clients have been served
             if len(clienti_non_serviti) == 0:
                 punteggio_attuale = objective_function(rotte, D)
                 
@@ -245,7 +245,7 @@ def get_best_params(clienti, D, capacita, num_veicoli, passo=0.1):
 
     if migliori_parametri is None:
         print("ATTENZIONE: Nessuna combinazione di parametri ha prodotto una soluzione valida (tutti i clienti serviti).")
-        return (0.0, 0.0, 0.0), float('inf') # Ritorna valori di default
+        return (0.0, 0.0, 0.0), float('inf') #return the default values
         
     print("Calibrazione completata.")
     return migliori_parametri, miglior_punteggio
@@ -258,21 +258,20 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
 
     num_rotte = len(rotte)
 
-    if num_rotte < 2 : #Non si puo fare uno swap tra due rotte se ne esiste solo una
+    if num_rotte < 2 : #A swap can't be performed with only one route
         return rotte,a,False
 
-    #genero randomicamente gli indici delle due rotte
+    # randomly generate the two route indices
     r1 = random.randint(0,num_rotte-1)
     r2 = random.choice([i for i in range(0,num_rotte) if i != r1])
 
-    #saranno rispettivamente le njuove rotte e il nuovo vettore dei cos
     rotte_new = [r[:] for r in rotte]
     a_new = [a[i] for i in range(len(a))]
     
     if len(rotte_new[r1]) <= 2 and len(rotte_new[r2]) <= 2 :
         return rotte,a,False
 
-    #genero randomicamente gli indici dei due clienti delle due rotte da scambiare
+    # randomly generate the two client indices of the two routes affected by the swap move
     if len(rotte_new[r1]) > 3 :
         p = random.randint(1,len(rotte_new[r1])-2)
     else :
@@ -288,7 +287,7 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
     rotte_new[r1] = rotte[r1][0:p+1] + segment_r1
     rotte_new[r2] = rotte[r2][0:q+1] + segment_r2
 
-    #1)verifica capacita veicolo per ambedue le rotte
+    #1) check the vehicle capacity for both routes
     domanda_totale_r1 = sum([clienti[rotte_new[r1][i]]['demand'] for i in range(0,len(rotte_new[r1]))])
     
     if domanda_totale_r1 > capacita :
@@ -299,13 +298,13 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
     if domanda_totale_r2 > capacita :
         return rotte,a,False
 
-    #2)verifica vincoli temporali sulla rotta r1
+    #2) check time constraints on route r1
     a_new,fattibile = check_finestre_temporali(clienti,rotte_new,r1,p+1,a_new,D)
 
     if fattibile == False :
         return rotte,a,False
 
-    #3)verifica vincoli temporali sulla rotta r2
+    #3) check time constraints on route r2
     a_new,fattibile = check_finestre_temporali(clienti,rotte_new,r2,q+1,a_new,D)
 
     if fattibile == False :
@@ -314,7 +313,7 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
     f_new = objective_function(rotte_new,D)
     f_curr = objective_function(rotte,D)
 
-    #se funzione obiettivo migliorata
+    # Objective function improved
     if f_new < f_curr :
             return rotte_new,a_new,True
     
