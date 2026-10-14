@@ -15,7 +15,7 @@ $l_i$ (the instant when the service of the client can start) and bounded above b
 the due time $L_i$ (the last instant when the client can be served).
 
 The following assumptions are adopted:
-- each client is served by a single vehicle;
+- each client is served by a single vehicle.
 - each graph arc is crossed by a single vehicle.
 - the vehicles are homogeneous, which means they have the same capacity and the same features.
 
