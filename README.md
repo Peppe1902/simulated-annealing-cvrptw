@@ -43,3 +43,11 @@ SimulatedAnnealing(T0, Tf, alpha, Lk)
 
     return X_best, F_best
 ```
+
+The specific parameters to tune carefully are:
+`T_0` : initial  temperatures that must be sufficiently high.
+`T_f` : final temperature where the cooling process end.
+$\alpha$ — parameter used in the exponential cooling law to compute the next temperature value (e.g. $T_{k+1} = \alpha \cdot T_k$)
+$L_k$ — number of transitions (or moves) to perform at the same temperature value (the value should be chosen according to the $\alpha$ parameter)
+
+L’aspetto chiave è che, anche se una soluzione 𝑋′ producesse un valore della funzione obiettivo peggiore, tale peggioramento verrebbe accettato comunque ma con una probabilità 𝑒−Δ𝑇, dove Δ = 𝐹(𝑋′) − 𝐹(𝑋). L’accettazione si puo implementare semplicemente generando randomicamente un numero 𝑟 in [0,1] e verificare se sia inferiore o meno a 𝑒−Δ𝑇.
