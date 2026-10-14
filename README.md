@@ -104,6 +104,10 @@ Adaptive probabilites:
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/16fddcd6-6a46-4a95-a6bb-b58fa670c30e" />
 
+<img width="1597" height="872" alt="image" src="https://github.com/user-attachments/assets/9f7971c0-1a2a-4e48-870e-f30c228fd8bc" />
+
+<img width="1615" height="876" alt="image" src="https://github.com/user-attachments/assets/ef223a47-8fe6-46d5-805c-077449ec1817" />
+
 
 **Instance R2_2_3 (200 customers):**
 - Final objective function value 𝑓 = 2865.8053590536174
