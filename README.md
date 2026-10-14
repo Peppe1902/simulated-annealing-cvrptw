@@ -7,8 +7,8 @@ service time and so on), and $n$ clients, the purpose is to compute, for each
 vehicle, the route that starts from a depot, serves the assigned clients and
 returns to the initial point, optimizing an objective function $F$.
 The problem can be seen as a merge of two combinatorial problems:
-- Travelling Salesman Problem
-- Clustering
+- Travel Salesman Problem.
+- Clustering.
 
 
 Esistono moltissime varianti di tale problema, il nostro lavoro si è focalizzato sulla variante
