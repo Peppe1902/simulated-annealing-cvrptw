@@ -122,7 +122,25 @@ $i+1$. The two arcs are chosen randomly in this move implementation.
 
 ### Fixed Probabilites and Adaptive Probabilities
 
-TO DO 
+The basic idea is to assign fixed probabilities to the three moves and execute them with those probabilities. If $w$ is the weight vector of the three moves, it is possible to normalize it to obtain the associated probabilities:
+
+$$P_j = \frac{w_j}{\sum_k w_k}$$
+
+The weights may be updated depending on three situations that can occur:
+- improvement with respect to the best objective function value found so far (global improvement)
+- local improvement but not global.
+- worsening, but accepted due to the simulated annealing mechanism.
+
+Two vector are defined:
+Two vectors are defined:
+- `scores` — for each move $i$, the score is updated as  $\text{scores}[i] = \text{scores}[i] + \text{reward}$
+- `usage` — for each move $i$, tracks the number of times that move has been used
+
+Every $K_{interval}$ updates of the temperature $T$, the weights and the associated probabilities are computed with the following expressions:
+
+1) $$w[\text{move}] = w[\text{move}] \cdot (1 - \gamma) + \gamma \cdot \frac{\text{scores}[\text{move}]}{\text{usage}[\text{move}]}$$
+
+2) $$P[\text{move}] = \frac{w[\text{move}]}{\sum_{k} w[k]}$$
 
 ## Testing with Adaptive Probabilites
 
