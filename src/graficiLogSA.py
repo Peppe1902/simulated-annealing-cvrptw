@@ -4,9 +4,8 @@ import numpy as np
 
 
 if __name__ == '__main__' : 
-
-    # 1. Leggere il file CSV
-    file_path = "DatiRaccolti/LogSARC2_2_5.txt"  # sostituisci con il percorso corretto del tuo file
+    
+    file_path = "DatiRaccolti/LogSARC2_2_5.txt"  # replace with the correct path of your file
     df = pd.read_csv(file_path)
 
     plt.figure()
