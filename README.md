@@ -1,7 +1,6 @@
 # simulated-annealing-cvrptw
 Simulated annealing applied to the Capacitated Vehicle Routing Problem with Time Windows
 
-  
 ## Simulated Annealing
 
 It is one of the most used metaheuristics to solve combinatorial optimization problems. It belongs to the family of algorithms that simulate natural phenomena.
