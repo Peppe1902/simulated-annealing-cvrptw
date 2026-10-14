@@ -74,6 +74,24 @@ where $\Delta = F(X') - F(X)$.
 ## Initial solution generation (TONN approach)
 
 ## Implemented moves
+`cross_exchange_move()` : inter-route move that randomly chooses two routes $r_1$
+and $r_2$ and two segments $r_1[p:]$ and $r_2[q:]$, and performs the exchange,
+checking whether the resulting solution meets the constraints.
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/d1d55620-a8f5-46a2-bf81-ffa39f1ad4a6" />
+
+`best_insertion_move()` : inter-route move that randomly chooses two routes $r_1$
+and $r_2$, removes a client from one and inserts it in the best position in the
+other route (the position that gives the best value of the objective function $F$).
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/b3a18ce7-fca9-4e35-a28b-ce669c9a27a9" />
+
+`randomized_2opt()` — famous intra-route move that selects two non-adjacent arcs
+$(u_i, u_{i+1})$ and $(u_j, u_{j+1})$ and links $u_i$ with $u_j$ and $u_{i+1}$ with
+$u_{j+1}$, then reverses the direction of the arcs, orienting them from $j$ to
+$i+1$. The two arcs are chosen randomly in this move implementation.
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/fd9ab489-323f-41b2-988a-4dde6c898818" />
 
 ## Testing
 
