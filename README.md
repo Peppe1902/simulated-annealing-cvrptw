@@ -133,7 +133,8 @@ The weights may be updated depending on three situations that can occur:
 
 Two vector are defined:
 Two vectors are defined:
-- `scores` — for each move $i$, the score is updated as  $\text{scores}[i] = \text{scores}[i] + \text{reward}$
+- `scores` — for each move $i$, the score is updated as:
+   $\text{scores}[i] = \text{scores}[i] + \text{reward}$
 - `usage` — for each move $i$, tracks the number of times that move has been used
 
 Every $K_{interval}$ updates of the temperature $T$, the weights and the associated probabilities are computed with the following expressions:
