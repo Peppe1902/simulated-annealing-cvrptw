@@ -62,17 +62,17 @@ Function that computes the distance matrix between all the couples (i, j)
 '''
 def distances_matrix(deposito,clienti) :
 
-    #clienti.insert(0, deposito)  # 0 is the depot index
+    # clienti.insert(0, deposito)  # 0 is the depot index
     n = len(clienti)
     print(n)
 
     D = np.zeros((n,n))
 
-    #distance between the node and itself
+    # distance between the node and itself
     for i in range(0,n) :
         D[i][i] = 0
 
-   # distance between the depot and all the nodes
+    # distance between the depot and all the nodes
     for i in range(0,n) :
         D[0][i] = np.sqrt((deposito['x']-clienti[i]['x'])**2 + (deposito['y']-clienti[i]['y'])**2)
         D[i][0] = D[0][i]
@@ -102,19 +102,19 @@ def plot_rotte(rotte, clienti, deposito=0):
 
     plt.figure(figsize=(8, 6))
     
-    #Draw deposit
+    # Draw deposit
     depot_x = clienti[deposito]['x']
     depot_y = clienti[deposito]['y']
     plt.scatter(depot_x, depot_y, c='red', s=150, marker='s', label='Deposito') 
 
-    #Draw client
+    # Draw client
     for i, c in enumerate(clienti):
         if i != deposito:
             plt.scatter(c['x'], c['y'], c='black', s=40)
             plt.text(c['x'] + 0.8, c['y'] + 0.8, str(i), fontsize=8)
          
     
-    #Draw routes
+    # Draw routes
     for k, route in enumerate(rotte):
         color = (random.random(), random.random(), random.random())
         x = [clienti[i]['x'] for i in route]
@@ -173,7 +173,7 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
                     nodo_curr = j
  
         if nodo_curr == None :
-            rotte[k].append(deposito) # close the current route 
+            rotte[k].append(deposito) # it closes the current route 
             k = k + 1
 
             if k < num_veicoli and len(U) > 0 :
@@ -189,7 +189,7 @@ def TimeOrientedNN(clienti,D,capacita,num_veicoli,delta1=0.4,delta2=0.3,delta3=0
             demands[k] = demands[k] + clienti[nodo_curr]['demand']
             nodo_prec = nodo_curr
 
-            U = [c for c in U if c['id'] != nodo_curr] #remove nodo_curr from unrouted clients
+            U = [c for c in U if c['id'] != nodo_curr] #it removes nodo_curr from unrouted clients
             
     
     ultima_rotta = rotte[-1] #-1 represents the last element of the vector
@@ -365,7 +365,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
         k = random.randint(1,len(rotte_new[r1])-2)
 
     new_client = rotte_new[r1][k]
-    rotte_new[r1].remove(new_client) #remove the client with ID "new_client" from the first route
+    rotte_new[r1].remove(new_client) # remove the client with ID "new_client" from the first route
 
     # after the client removal, check the time constraints
     a_base,fattibile = check_finestre_temporali(clienti,rotte_new,r1,k,a_base,D)
@@ -374,7 +374,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
         return rotte,a,False
     
     #-------------destination route----------------
-    f_best = objective_function(rotte,D) #objective function value computed before move execution
+    f_best = objective_function(rotte,D) # objective function value computed before move execution
     pos_best = -1 
     a_best = a_base.copy() # arrival times vector of the best solution
     rotte_best = [r[:] for r in rotte_new] # best route depending on the best insertion position
@@ -408,7 +408,7 @@ def best_insertion_move(clienti, rotte, D, a, capacita):
             pos_best = curr_pos
             f_best = f_tmp
             a_best = a1.copy()
-            rotte_best = [r[:] for r in rotte_tmp] #routes updated
+            rotte_best = [r[:] for r in rotte_tmp] # routes updated
 
     if pos_best == -1 :
             return rotte,a,False
@@ -429,49 +429,47 @@ def randomized_move_2_opt(clienti, rotte, D, a):
     if num_rotte == 0:
         return rotte, a,False
 
-    # 1.Scelta della Rotta scegli una rotta a caso che non sia vuota (dopo i depositi)
-    candidate_routes = [idx for idx, r in enumerate(rotte) if len(r) > 4] # Minimo 5 nodi: Dep-C1-C2-C3-Dep per 2-opt
+    #Randomly chosen route (it must not be empty)
+    candidate_routes = [idx for idx, r in enumerate(rotte) if len(r) > 4] # Minimum 5 nodes: Dep-C1-C2-C3-Dep per 2-opt
     if not candidate_routes:
         return rotte, a, False
     
     id_rotta = random.choice(candidate_routes)
     
-    n = len(rotte[id_rotta]) # Lunghezza della rotta, include i depositi iniziali e finali
+    n = len(rotte[id_rotta]) # route length (include the depot)
 
-    # Caso Limite: La rotta è troppo corta per un'inversione 2-opt
-    # Per eseguire una 2-opt (rimozione di due archi non adiacenti)
-    # la rotta deve avere almeno 5 nodi: Dep(0) - C1(1) - C2(2) - C3(3) - Dep(4)
+    # route too small for a 2-opt
+    # in order to perform a 2-opt move (removal of two non-adjacent arcs),
+    # the route must have at least 5 nodes: Dep(0) - C1(1) - C2(2) - C3(3) - Dep(4)
+
     if n < 5:
         return rotte, a, False
 
-    # 2.Scelta dei Punti di Taglio (i e j)
-    #L'indice i è il nodo PRECEDENTE al segmento invertito
-    #L'indice j è l'ULTIMO nodo del segmento invertito
-    # n-5: ultimo nodo cliente valido come i è n-5 (così j è al massimo n-2)
+    # 2. selection of the cut points (i and j)
+    # index i is the node BEFORE the reversed segment
+    # index j is the LAST node of the reversed segment
+    # n-5: the last client node valid as i is n-5 (so that j is at most n-2)
     i = random.randint(1, n - 4)  # 1 <= i <= n-4 (jmax-1)
-    j = random.randint(i + 2, n - 2) # i+2 <= j <= n-2 (deve esserci almeno un nodo tra i e j, e uno dopo j)
+    j = random.randint(i + 2, n - 2) # i+2 <= j <= n-2 (there must be at least one node between i and j, and one node after j)
     
-    # 3.Preparazione della Nuova Soluzione
-    # Usiamo una copia profonda di tutta la struttura per sicurezza
+    # 3. New solution preparation
     a_new = a.copy()
     rotte_new = [r[:] for r in rotte]
 
-    segment_inv = [] #segmento invertito
-    r_idx = j    # Indice di lettura (Vecchia Rotta), parte da j
+    segment_inv = [] # inverted egment 
+    r_idx = j    # read index (old route), starts from j
     
-    # 4. Implementazione dell'Inversione del Segmento [i+1, j]
-    # Ciclo di Inversione: copia i nodi [i+2...j] in ordine inverso
+    # 4. Implementation of the segment inversion [i+1, j]
+    # inversion cycle: copy nodes [i+2...j] in reverse order
     while r_idx >= (i + 1):
-        #Aggiungi il nodo r_idx (dalla vecchia rotta) in segment
-        segment_inv.append(rotte[id_rotta][r_idx]) #leggo il segmento al contrario
+        
+        #Add node r_idx (frome the old route) in segment
+        segment_inv.append(rotte[id_rotta][r_idx]) # read the segment backwards
         
         r_idx -= 1
         
-    #[a,b] b indica l'indice finale ed è escluso (+ : concatenazione di liste)
+    # [a, b]: b is the end index and is excluded (+ : list concatenation)
     rotte_new[id_rotta]= rotte[id_rotta][:i+1] + segment_inv + rotte[id_rotta][j+1:]
-
-    #NOTA:I segmenti rotte_new[rotta_idx][0:i] e rotte_new[rotta_idx][j+1:] sono rimasti invariati grazie alla copia iniziale.
-    #altro modo : rotta_new = rotta[:i+1] + rotta[i+1:j+1][::-1] + rotta[j+1:]
 
     a_new, fattibile = check_finestre_temporali(clienti, rotte_new,id_rotta, i + 1, a_new, D)
 
@@ -481,7 +479,7 @@ def randomized_move_2_opt(clienti, rotte, D, a):
     f_new = objective_function(rotte_new,D)
     f_curr = objective_function(rotte,D)
 
-    #se funzione obiettivo migliorata
+    #objective function improved
     if f_new < f_curr :
             return rotte_new,a_new,True
     
@@ -489,10 +487,7 @@ def randomized_move_2_opt(clienti, rotte, D, a):
 
 
 
-'''SimulatedAnnealing Algorithm'''
-# Supponiamo che le funzioni 'objective_function', 'best_insertion_move', 
-# 'randomized_move_2_opt', 'cross_exchange_move' e le variabili 'clienti', 
-# 'D', 'capacita' siano definite altrove.
+'''SimulatedAnnealing Algorithm with Adaptive Probabilites'''
 def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0) :
 
     X = [r[:] for r in X_0]
@@ -598,6 +593,7 @@ def SimulatedAnnealingDynamic(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0
     return X_best, f_best, a_best
 
 
+'''SimulatedAnnealing Algorithm with Fixed Probabilites'''
 def SimulatedAnnealingFixed(T0, Tf, alfa, Lk, X_0, a, clienti, D, capacita, w0) :
 
     X = [r[:] for r in X_0]
