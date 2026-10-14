@@ -76,7 +76,7 @@ where $\Delta = F(X') - F(X)$.
 ## Implemented moves
 `cross_exchange_move()` : inter-route move that randomly chooses two routes $r_1$
 and $r_2$ and two segments $r_1[p:]$ and $r_2[q:]$, and performs the exchange,
-checking whether the resulting solution meets the constraints.
+checking whether the derived solution meets the constraints.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/d1d55620-a8f5-46a2-bf81-ffa39f1ad4a6" />
 
