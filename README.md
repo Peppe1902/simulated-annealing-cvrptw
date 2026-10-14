@@ -1,5 +1,4 @@
 # simulated-annealing-cvrptw
-Simulated annealing applied to the Capacitated Vehicle Routing Problem with Time Windows
 
 The Capacitated Vehicle Routing Problem is one of the most famous combinatorial
 optimization problems. Given $m$ vehicles, which can be homogeneous or not (e.g. same capacity, same
