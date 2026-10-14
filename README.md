@@ -45,8 +45,8 @@ SimulatedAnnealing(T0, Tf, alpha, Lk)
 ```
 
 The specific parameters to tune carefully are:
-- `T_0` : initial  temperatures that must be sufficiently high.
-- `T_f` : final temperature where the cooling process end.
+- $T_0$ : initial  temperatures that must be sufficiently high.
+- $T_f$ : final temperature where the cooling process end.
 - $\alpha$ : parameter used in the exponential cooling law to compute the next temperature value (e.g. $T_{k+1} = \alpha \cdot T_k$)
 - $L_k$ : number of transitions (or moves) to perform at the same temperature value (the value should be chosen according to the $\alpha$ parameter)
 
