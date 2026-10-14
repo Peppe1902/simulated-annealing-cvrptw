@@ -119,6 +119,11 @@ $i+1$. The two arcs are chosen randomly in this move implementation.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/fd9ab489-323f-41b2-988a-4dde6c898818" />
 
+
+### Fixed Probabilites VS Adaptive Probabilities
+
+TO DO 
+
 ## Testing with Adaptive Probabilites
 
 The instances used during testing are available at
