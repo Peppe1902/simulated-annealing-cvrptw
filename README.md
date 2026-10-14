@@ -9,7 +9,8 @@ The phenomena is **annealing process of a solid**:
 - The solid starts at an initial high temperature (close to the **melting point**) and the molecules within the solid follow a **random distribution**
 - Reducing the temperature slowly, the particles will try to position themselves in an equilibrium state
 - If the cooling process were too fast, the particles would not have time to position themselves and this would cause the loss of the initial structure
-- The **Metropolis algorithm** allows the simulation of this process and is shown in the pseudocode reported below.
+
+The **Metropolis algorithm** allows the simulation of this process and is shown in the pseudocode reported below:
 
 ```
 SimulatedAnnealing(T0, Tf, alpha, Lk)
