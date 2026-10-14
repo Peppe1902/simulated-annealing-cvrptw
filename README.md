@@ -10,18 +10,16 @@ The problem can be seen as a merge of two combinatorial problems:
 - Travel Salesman Problem.
 - Clustering.
 
+There are different versions of this problem. This project focuses on the variant
+where each client is associated with a time window bounded below by the ready time
+$l_i$ (the instant when the service of the client can start) and bounded above by
+the due time $L_i$ (the last instant when the client can be served).
 
-Esistono moltissime varianti di tale problema, il nostro lavoro si è focalizzato sulla variante
-che prevede di associare a ciascun cliente una finestra temporale delimitata inferiormente da
-un ready_time 𝒍 𝒊 (cioè, istante in cui il cliente puo iniziare ad essere servito) e superiormente
-da un due_time 𝑳 𝒊 (ultimo istante utile in cui il cliente puo essere servito).
-Prima di presentare quella che è la formulazione, alcune assunzioni state considerate:
-1. Ogni cliente può essere raggiunto da un unico veicolo.
-2. Ogni arco del grafo può essere attraversato da un unico camion.
-3. I veicoli sono omogenei, cioè, sono identici in termini di capacità e caratteristiche.
-La formulazione prevede di definire le variabili decisionali, la funzione obiettivo e vincoli che
-devono essere soddisfatti.
-
+The following assumptions are adopted:
+The following assumptions are adopted:
+- each client is served by a single vehicle;
+- each graph arc is crossed by a single vehicle.
+- the vehicles are homogeneous, which means they have the same capacity and the same features.
 
 ## Simulated Annealing
 
