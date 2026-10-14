@@ -261,7 +261,7 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
     if num_rotte < 2 : #A swap can't be performed with only one route
         return rotte,a,False
 
-    # randomly generate the two route indices
+    # randomly generates the two route indices
     r1 = random.randint(0,num_rotte-1)
     r2 = random.choice([i for i in range(0,num_rotte) if i != r1])
 
@@ -271,7 +271,7 @@ def cross_exchange_move(clienti,rotte,D,a,capacita) :
     if len(rotte_new[r1]) <= 2 and len(rotte_new[r2]) <= 2 :
         return rotte,a,False
 
-    # randomly generate the two client indices of the two routes affected by the swap move
+    # randomly generates the two client indices of the two routes affected by the swap move
     if len(rotte_new[r1]) > 3 :
         p = random.randint(1,len(rotte_new[r1])-2)
     else :
