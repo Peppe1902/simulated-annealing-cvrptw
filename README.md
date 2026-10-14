@@ -73,6 +73,16 @@ where $\Delta = F(X') - F(X)$.
 
 ## Initial solution generation (TONN approach)
 
+Tale sezione si propone di presentare l’euristica utilizzata per produrre la soluzione iniziale 𝑆 da cui poi partire per l’applicazione della meta-euristica Simulated Annealing. Il modo in cui la soluzione iniziale è stata determinata è di base molto semplice, e si basa su una euristica greedy
+Partendo dal deposito, di volta in volta, viene considerato come successivo cliente da servire quello piu vicino, dove il concetto di vicinanza deve tenere in conto sia la distanza geografica che temporale. Naturalmente l’aggiunta di un nodo nella rotta corrente non deve provocare né la violazione delle finestre temporali né i limiti di capienza massima dei veicoli. Al verificarsi di una situazione del genere si puo creare una nuova rotta (quindi usare un veicolo in piu) e aggiungere il nuovo cliente.
+Se 𝑖 è l’ultimo cliente servito nella rotta corrente e 𝑗 un generico cliente non ancora servito, cioè, appartenente all’insieme dei clienti “unrouted” 𝑼 definiamo con 𝑐𝑖𝑗 la “metrica” di vicinanza tra i due nodi. Tale metrica è combinazione lineare di tre parametri: 𝒄𝒊𝒋=𝜹𝟏𝒅𝒊𝒋+𝜹𝟐𝑻𝒊𝒋+𝜹𝟑𝒗𝒊𝒋
+- 𝑫𝒊𝒋 : indica la distanza fisica tra i due nodi.
+- 𝑻𝒊𝒋 : indica la distanza temporale che possiamo espressa come differenza tra l’istante di inizio servizio del nodo 𝑗 e la fine del servizio del nodo 𝑖 cioè, in termini matematici : 𝑻𝒊𝒋=𝒂𝒋 − (𝒂𝒊+𝒔𝒊).
+- 𝒗𝒊𝒋 : indica il tempo rimanente affinché il servizio del cliente 𝑗 possa iniziare senza eccedere la finestra temporale (cioè, l’estremo superiore 𝐿𝑖), in termini matematici : 𝒗𝒊𝒋=𝑳𝒊− (𝒂𝒊+𝒔𝒊+𝒕𝒊𝒋).
+I tre parametri 𝛿1,𝛿2,𝛿3 sono non negativi e la loro somma deve essere 1 (𝛿1 + 𝛿2+𝛿3 = 1). La loro scelta va effettuata empiricamente sulla base delle istanze che si hanno a disposizione.
+
+Tale semplice euristica è stata proposta da Solomon e prende il nome di Time Oriented Nearest Neighbor Heuristic
+
 ## Implemented moves
 `cross_exchange_move()` : inter-route move that randomly chooses two routes $r_1$
 and $r_2$ and two segments $r_1[p:]$ and $r_2[q:]$, and performs the exchange,
