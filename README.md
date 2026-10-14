@@ -71,3 +71,9 @@ If solution $X'$ produced a worse value of the objective function $F(X')$, this 
 where $\Delta = F(X') - F(X)$. 
 - This idea can be implemented by simply generating a random number $r$ in $[0,1]$ and checking if it is lower than $e^{-\Delta/T}$.
 
+## Initial solution generation (TONN approach)
+
+## Implemented moves
+
+## Testing
+
