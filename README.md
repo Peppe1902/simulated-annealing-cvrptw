@@ -94,7 +94,10 @@ $i+1$. The two arcs are chosen randomly in this move implementation.
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/fd9ab489-323f-41b2-988a-4dde6c898818" />
 
 ## Testing with Adaptive Probabilites
- 
+
+The instances used during testing are available at
+[SINTEF's Solomon benchmark page](https://www.sintef.no/projectweb/top/vrptw/solomon-benchmark/).
+
 **Instance R208 (100 customers):**
 - Final objective function value: $f = 776.60$
 - Simulated annealing duration: $t = 27.2881$ s (with $\alpha = 0.98$)
