@@ -1,7 +1,7 @@
 # simulated-annealing-cvrptw
 
-The Capacitated Vehicle Routing Problem is one of the most famous combinatorial
-optimization problems. Given $m$ vehicles, which can be homogeneous or not (e.g. same capacity, same
+The **Capacitated Vehicle Routing** Problem is one of the most famous combinatorial optimization problems. 
+Given $m$ vehicles, which can be homogeneous or not (e.g. same capacity, same
 service time and so on), and $n$ clients, the purpose is to compute, for each
 vehicle, the route that starts from a depot, serves the assigned clients and
 returns to the initial point, optimizing an objective function $F$.
