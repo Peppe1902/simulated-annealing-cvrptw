@@ -1,6 +1,28 @@
 # simulated-annealing-cvrptw
 Simulated annealing applied to the Capacitated Vehicle Routing Problem with Time Windows
 
+The Capacitated Vehicle Routing Problem is one of the most famous combinatorial
+optimization problems. Given $m$ vehicles, which can be homogeneous or not (e.g. same capacity, same
+service time and so on), and $n$ clients, the purpose is to compute, for each
+vehicle, the route that starts from a depot, serves the assigned clients and
+returns to the initial point, optimizing an objective function $F$.
+The problem can be seen as a merge of two combinatorial problems:
+- Travelling Salesman Problem
+- Clustering
+
+
+Esistono moltissime varianti di tale problema, il nostro lavoro si è focalizzato sulla variante
+che prevede di associare a ciascun cliente una finestra temporale delimitata inferiormente da
+un ready_time 𝒍 𝒊 (cioè, istante in cui il cliente puo iniziare ad essere servito) e superiormente
+da un due_time 𝑳 𝒊 (ultimo istante utile in cui il cliente puo essere servito).
+Prima di presentare quella che è la formulazione, alcune assunzioni state considerate:
+1. Ogni cliente può essere raggiunto da un unico veicolo.
+2. Ogni arco del grafo può essere attraversato da un unico camion.
+3. I veicoli sono omogenei, cioè, sono identici in termini di capacità e caratteristiche.
+La formulazione prevede di definire le variabili decisionali, la funzione obiettivo e vincoli che
+devono essere soddisfatti.
+
+
 ## Simulated Annealing
 
 It is one of the most used metaheuristics to solve combinatorial optimization problems. It belongs to the family of algorithms that simulate natural phenomena.
